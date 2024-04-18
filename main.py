@@ -18,6 +18,8 @@ class Paintk():
 
         self.colors = ("black","white","yellow","green","orange","blue","purple","pink","red")
 
+        self.pick_colors = "black"
+
         self.bar_menu = tk.Frame(self.window, bg="#3b3b3b",height=30)
         self.bar_menu.pack(fill="x")
 
@@ -25,7 +27,7 @@ class Paintk():
         self.text_color.pack(side="left")
 
         for i in self.colors:
-            self.button_color = tk.Button(self.bar_menu, bg=i, width=5, height=2)
+            self.button_color = tk.Button(self.bar_menu, bg=i, width=5, height=2, command=lambda col=i:self.select_colors(col))
             self.button_color.pack(side="left")
 
         self.text_brushs = tk.Label(self.bar_menu, text="  Brushs:  ", fg="white", bg="#3b3b3b")
@@ -60,6 +62,18 @@ class Paintk():
 
         self.area_draw = tk.Canvas(self.window, height=470, bg="red")
         self.area_draw.pack(fill="both")
+        self.area_draw.bind("<B1-Motion>", self.draw)
+
+    def draw(self, event):
+        x1 = (event.x)
+        x2 = (event.x)
+        y1 = (event.y)
+        y2 = (event.y)
+
+        self.area_draw.create_oval(x1, y1, x2, y2, fill=self.pick_colors, outline=self.pick_colors, width=self.pen_size.get())
+
+    def select_colors(self, color):
+        self.pick_colors = color
 
     def run(self):
         self.window.mainloop()
