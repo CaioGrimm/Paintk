@@ -9,6 +9,10 @@ class Paintk():
         self.window.minsize(width=1000, height=500)
         self.window.resizable(0, 0) # type: ignore
 
+        self.oval_brush = True
+        self.line_brush = False
+        self.eraser_brush = False
+
         self.img_eraser = tk.PhotoImage(file="icons/eraser.png")
         self.img_line = tk.PhotoImage(file="icons/line.png")
         self.img_new = tk.PhotoImage(file="icons/new.png")
@@ -39,13 +43,13 @@ class Paintk():
         self.text_brushs = tk.Label(self.bar_menu, text="  Brushs:  ", fg="white", bg="#3b3b3b")
         self.text_brushs.pack(side="left")
 
-        self.button_line = tk.Button(self.bar_menu, image=self.img_line, bd=0)
+        self.button_line = tk.Button(self.bar_menu, image=self.img_line, bd=0, command=self.brush_line)
         self.button_line.pack(side="left")
         
-        self.button_oval = tk.Button(self.bar_menu, image=self.img_oval, bd=0)
+        self.button_oval = tk.Button(self.bar_menu, image=self.img_oval, bd=0, command=self.brush_oval)
         self.button_oval.pack(side="left")
 
-        self.button_eraser = tk.Button(self.bar_menu, image=self.img_eraser, bd=0)
+        self.button_eraser = tk.Button(self.bar_menu, image=self.img_eraser, bd=0, command=self.brush_eraser)
         self.button_eraser.pack(side="left")
 
         self.button_square = tk.Button(self.bar_menu, image=self.img_square, bd=0)
@@ -70,10 +74,32 @@ class Paintk():
         y1 = (event.y)
         y2 = (event.y)
 
-        self.area_draw.create_oval(x1, y1, x2, y2, fill=self.pick_colors, outline=self.pick_colors, width=self.pen_size.get())
+        if self.oval_brush:
+            self.area_draw.create_oval(x1, y1, x2, y2, fill=self.pick_colors, outline=self.pick_colors, width=self.pen_size.get())
+
+        elif self.line_brush :
+            self.area_draw.create_line(x1 - 10, y1 - 10, x2, y2, fill=self.pick_colors, width=self.pen_size.get())
+        
+        else:
+            self.area_draw.create_oval(x1, y1, x2, y2, fill="red", outline="red", width=self.pen_size.get())
 
     def select_colors(self, color):
         self.pick_colors = color
+    
+    def brush_oval(self):
+        self.oval_brush = True
+        self.line_brush = False
+        self.eraser_brush = False
+
+    def brush_line(self):
+        self.oval_brush = False
+        self.line_brush = True
+        self.eraser_brush = False
+
+    def brush_eraser(self):
+        self.oval_brush = False
+        self.line_brush = False
+        self.eraser_brush = False
 
     def run(self):
         self.window.mainloop()
